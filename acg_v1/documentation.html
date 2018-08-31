@@ -1,0 +1,149 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#USAGE">USAGE</a>
+    <ul>
+      <li><a href="#Installation">Installation</a></li>
+      <li><a href="#To-run">To run</a></li>
+      <li><a href="#Options">Options</a></li>
+      <li><a href="#Choosing-the-input">Choosing the input</a></li>
+      <li><a href="#Understanding-the-output">Understanding the output</a></li>
+      <li><a href="#Adding-knowledge-to-the-database">Adding knowledge to the database</a>
+        <ul>
+          <li><a href="#Adding-constructions">Adding constructions</a></li>
+          <li><a href="#Adding-rules">Adding rules</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#LIMITATIONS">LIMITATIONS</a></li>
+  <li><a href="#DISCLAIMER-AND-FEEDBACK">DISCLAIMER AND FEEDBACK</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>ACG (Another Construction Grammar or Associative Construction Grammar)</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p><b>Implementation Date:</b> Aug. 17, 2018</p>
+
+<p><b>Version:</b> 1</p>
+
+<p>&quot;Associative&quot; is used in the name above because the implementation is aimed at associating knowledge from as many sources as needed for a practical task. To associate means to combine various parts of knowledge and establish the relation among those parts. The knowledge is used to understand text by means of AI. The task can be, for instance, disambiguating a sentence and answering questions on it. This software tries to understand text by using constructions, i.e. data structures that describe text form and the meaning corresponding to that form. The knowledge can be put into the constructions from various sources such as publicly available human knowledge bases (WordNet, etc.) or the construction designer&#39;s imagination.</p>
+
+<p>This implementation has knowledge (construction database) enough to output what ambiguous pronouns refer to (e.g., <code>refers_to =&gt; george_n #10</code>) in seven Winograd Schemas, i.e. fourteen statement-question sets. Can match the same input word with constructions for different parts of speech, e.g., &quot;&#39;s&quot; (apostrophe s) can be matched with the possessive ending---as in &quot;John&#39;s book&quot;---construction or with the verb &quot;is&quot; construction. For this example, and alike, will make two sentence parses: one for the sentence with the possessive, the other for the sentence with &quot;is&quot;. For the final output will chose only one sentence parse which &quot;makes sense&quot; i.e. the parse that has matched more phrase constructions. The &quot;sentence parse&quot; means word input that has matched constructions that hold various knowledge and, as a result of that matching, has been &quot;understood&quot;. How the input is understood is detailed in the paper below for a similar implementation.</p>
+
+<p>Denis Kiselev. A Construction-Grammar Approach to Computationally Solving the Winograd Schema: Implementation and Evaluation. In AAAI Spring Symposium Series (AAAI SSS), pages 185-192, Stanford University, USA, 2017.</p>
+
+<p><b>The text understanding gist, a quick illustration:</b> Suppose a database has a piece of knowledge (a construction) that says (in a machine-understandable way) &quot;a red apple is ripe&quot;. The input has the phrase &quot;a red apple&quot;. The machine finds an exact match of that input phrase and the same phrase in the construction. Because of the exact match the machine now knows that the input is talking about not only a red but also a ripe apple. Technically speaking, constructions are multidimensional associative arrays of syntactic, semantic and pragmatic data. This data format has proven versatile enough to make high-accuracy conclusions about the text of a major test for AI, the Winograd Schema.</p>
+
+<p>The present implementation allows what is to be matched in constructions to be not only words but also Perl-flavor Regex, a tool for matching character strings.</p>
+
+<h1 id="USAGE">USAGE</h1>
+
+<p><b>Should run on contemporary Linux, Mac and alike where Perl is usually a system component. Additional installations, etc. needed on Windows 10, for instructions see the file using_acg_on_windows10.pdf in the same folder as this documentation file. NOT tested on Windows prior to Windows 10, may work if the command prompt window supports utf8 and text coloring.</b></p>
+
+<h2 id="Installation">Installation</h2>
+
+<p>Just download/copy the folder containing the implementation into a directory (e.g., Desktop).</p>
+
+<h2 id="To-run">To run</h2>
+
+<p><code>perl acg.pl --benchmark --show_word_parses</code></p>
+
+<p>Open the terminal or bash on Windows program in the folder bin of this implementation, type the above, press enter. Can be run with or without the options. The files mentioned below can be found in the folders bin and lib.</p>
+
+<h2 id="Options">Options</h2>
+
+<p><code>--benchmark</code></p>
+
+<p>Appends the time it took to run the program to the end of the output.</p>
+
+<p><code>--show_word_parses</code></p>
+
+<p>Appends variant word parses for the input (sentence, etc.) to the beginning of the output.</p>
+
+<h2 id="Choosing-the-input">Choosing the input</h2>
+
+<p>Comment out one statement-question set (looks like <code>#my $input_text = &quot;...&quot;;</code>) in the file acg.pl (below <code>sub input_filter</code>, should be lines 993-1006) or put your own set between the commas instead of a current set. The commented out set will be input.</p>
+
+<h2 id="Understanding-the-output">Understanding the output</h2>
+
+<p>Prettified output in development. Currently, delimiters like <code>ARRAY(0x1075e30)</code> or <code>HASH(0x1076598)</code> are output between sentence and phrase components. In the output, whatever has matched in constructions is marked green, whatever has been automatically inserted into a construction (e.g., has been copied from another construction) is marked blue. The parse structure (e.g., what phrases are components of what phrases or sentences) can be understood by carefully looking through the output from top to bottom. Reading the above paper helps.</p>
+
+<h2 id="Adding-knowledge-to-the-database">Adding knowledge to the database</h2>
+
+<p>Perl skills and reading the above paper needed.</p>
+
+<h3 id="Adding-constructions">Adding constructions</h3>
+
+<p>To understand more words and phrase or sentence structures, more constructions are needed. The paper describes word, phrase and sentence constructions. The constructions can be added to the file WS_Constructions.pm. The file has comments like <code>#___WORD CONSTRUCTIONS</code> above lists for constructions of each of the three types. To add, say, a word construction for &quot;guy&quot; find any noun construction such as one for the word &quot;man&quot; (the construction that has <code>&#39;string&#39; =&gt; &#39;man&#39;,</code>) then copy, paste the construction and change the construction in a way that should be clear after reading the paper. Phrase and sentence constructions can be treated similarly.</p>
+
+<p>For the main script to see newly made constructions they must be exported i.e. added to one of the three lists that should be found in lines 3438-3464 of the file WS_Constructions.pm. The lists are for the three construction types, the word construction list starts from <code>our @w_constr = (</code>, phrase construction one from <code>our @phr_constr = (</code>, sentence construction one from <code>our @s_constr = (</code>. The lists have construction names so the construction name for the above &quot;guy&quot; example can be added in the format <code>{%man_w},</code> to the <code>our @w_constr = (</code> list.</p>
+
+<h3 id="Adding-rules">Adding rules</h3>
+
+<p>Rules are needed for anaphora resolution, which means for computationally figuring out, e.g. what/who &quot;they&quot; refers to in &quot;The city councilmen refused the demonstrators a permit because they feared violence.&quot;, a famous Winograd Schema sentence. Below is a simplified (but working) rule for this sentence. Thirteen rules are needed to disambiguate the fourteen statement-question sets mentioned in <b>SYNOPSIS</b>. Those rules should be found in the file WS_Constructions.pm, lines 3397-3434.</p>
+
+<p><code>my @rule_8 = ( &#39;c CONSTRUCTION=&gt;compl_s implies=&gt;concern&#39;, &#39;a refers_to pronoun_type=&gt;personal+:case=&gt;nominative INSERT_IF:nominal=&gt;yes+:used_as_agent=&gt;yes&#39; );</code></p>
+
+<p>All rules follow this format. The spacing and (and no spacing) as in the example <b>must</b> be strictly followed. A rule has two parts: the first starting with <code>&#39;c</code> and ending with <code>&#39;,</code> (a single quotation mark and comma) and the second with <code>&#39;a</code> and <code>&#39;</code> (a single quotation mark) respectively. <code>c</code> means the condition to be met, <code>a</code> means the action to be taken if the condition is met, the action part can have its own conditions inside it. The condition and action parts for the above example are detailed below.</p>
+
+<p><b>In the condition part</b> <code>&#39;c CONSTRUCTION=&gt;compl_s implies=&gt;concern&#39;,</code> and onwards notice the separating spaces.</p>
+
+<p><code>CONSTRUCTION=&gt;compl_s</code></p>
+
+<p>means the sentence for which this rule is supposed to work must be a complex sentence. Or, speaking technically, the parse construction feature <code>CONSTRUCTION</code> must have the value that includes <code>compl_s</code> and that feature-value pair must match the above pair in the rule, partial matches being allowed.</p>
+
+<p><code>implies=&gt;concern</code></p>
+
+<p>is another feature-value pair that must match in the sentence construction or its component i.e. &quot;concern&quot; must be implied. (It is implied by &quot;feared&quot; in the above Winograd Schema sentence.)</p>
+
+<p><b>In the action part</b> i.e. in <code>&#39;a refers_to pronoun_type=&gt;personal+:case=&gt;nominative INSERT_IF:nominal=&gt;yes+:used_as_agent=&gt;yes&#39;</code> the component</p>
+
+<p><code>&#39;a refers_to pronoun_type=&gt;personal+:case=&gt;nominative&#39;</code></p>
+
+<p>is used to find the pronoun i.e. a construction representing the pronoun into which the feature-value saying what this pronoun refers to will be inserted. <code>refers_to</code> will be inserted as the feature, the value will be found using the <code>INSERT_IF</code> component explained later. <code>pronoun_type=&gt;personal+:case=&gt;nominative&#39;</code> is a double condition to be met by the pronoun for the insertion to happen. These two feature-value pairs must match in the rule and the pronoun construction. (Conditions can be triple and so on, notice the non-spaced <code>+:</code> separator for condition parts.)</p>
+
+<p><code>&#39;INSERT_IF:nominal=&gt;yes+:used_as_agent=&gt;yes&#39;</code></p>
+
+<p>is used to find the sentence part to which the pronoun refers. <code>INSERT_IF:</code> is followed by</p>
+
+<p><code>nominal=&gt;yes+:used_as_agent=&gt;yes</code></p>
+
+<p>which is a double condition to be met by (i.e. to match in) a construction for a part of the sentence. Reference to that part will be inserted into the pronoun construction. <code>refers_to =&gt; det_adj_n_phr #3</code> (refers to &quot;The city councilmen&quot;) is the actual feature-value pair inserted into the construction for &quot;he&quot; in the above Winograd Schema example. The <code>nominal=&gt;yes+:used_as_agent=&gt;yes</code> condition means &quot;if the sentence part has features like those of a noun, and if that part expresses the doer of the action&quot;.</p>
+
+<p>For the above sentence example, some features and values were manually coded when the database was made, some were manipulated automatically when parsed. How exactly that happened can be understood by reading the paper and comparing the output with constructions in WS_Constructions.pm.</p>
+
+<p>The above rule can be glossed using the human language as follows: In a complex sentence that implies concern (has a part like &quot;feared&quot;), into a part that is a nominative case personal pronoun, insert <code>refers_to =&gt;</code> pointing to a part if that part has noun (or entity) features and means the doer of the action. This is just one possible solution of the anaphora problem, other feature-value pairs can be freely used in various constructions.</p>
+
+<p>Newly made rules can be added below line 3434 of WS_Constructions.pm. Rules must be also exported similarly to the way explained in <b>Adding constructions</b>. The exporting list for rule names like <code>[@rule_8],</code> should be found in lines 3468-3471.</p>
+
+<h1 id="LIMITATIONS">LIMITATIONS</h1>
+
+<p>Although the current rules can be effectively used for the Winograd Schemas test set mentioned in <b>SYNOPSIS</b>, the rules are rather simplistic and may not reflect some linguistic phenomena. Rule scalability (i.e. how many different Schemas can a single rule be effective for) is to be determined by testing on more Schemas. Work on automatic acquisition of constructions is now in progress.</p>
+
+<h1 id="DISCLAIMER-AND-FEEDBACK">DISCLAIMER AND FEEDBACK</h1>
+
+<p>This implementation is used at one&#39;s own risk. For use involving any commercial and/or military activity a formal permission must be obtained from the author. Feedback, such as bug reports, can be sent to the email address in the above paper.</p>
+
+
+</body>
+
+</html>
+
+
